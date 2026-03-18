@@ -1,110 +1,31 @@
 /*
- # props:
-    --> props are like argument
-    --> "props" is the keyword set by react.
-    --> we can pass anything in this    `<Func name="Raj"/>  <App name="Raj" name2={myObj} name3={myArr}/> like this
+ #Projects:
+    --> i have a slidbar with Number and character checkbox
+    --> while I side it is generating a random text of that length.
+
+        --> set all the variables as an state. created password as an state to get the latest data. 
+        --> Now we need an password generator function:
+            --> But here issue is we have 3 buttons or input field -> length, character, number
+            --> either we call this function on these 3 
+            --> or if we have something which can remember the function definition between re-render
+                --> use useCallbacks
+                    --> takes 2 args -> function, deps array
+ # useEffect:
+    --> Synchronize component with external function.
+    --> used in component lifcycles, at demount of comp, 
+    --> runs whenever there is any change in list of deps
+    
+
+ # useRef:
+    --> We want password to be copied in clipboard whenever we click on COPY button 
+    --> both buttons and input field are in different place. So we use reference to get that value.
+    --> create `const passwordRef = useRef(null)` and then `ref={passwordRef}`  gives into button 
+
+ # useCallback:
+    --> let us cache the function definition between re-renders
+    --> function definition ko cache/memory me rakh lo
+    --> It is useful to optimize as it cache the function defineition means all states and all it cache these.
 
 
-
- # tailwindCSS:
-    -->
-
-
- # react Strict Mode:
-        --> In development mode, 
-            --> React Strict Mode intentionally mounts and renders components twice (for function components) to help detect side effects and unsafe lifecycle patterns.
-                    --> Find side effects in render logic (e.g., mutating variables, setting timers, logging).
-                    --> Ensure your components are pure: the same inputs always produce the same output, with no unintended mutations. 
-                    --> Encourage resilient code that works under React’s concurrent rendering.
-
-                    --> Examples:
-                        --> Like we define 2 variables one inside and one outside function component
-                        --> count ++ in function,
-                        --> it is incosistent behaviour for React
-                            --> react will re-render twice and compare output for both. IOf same means correct UI.
-                                --> No mutation of external variables.
-                                --> Same input (guest={1}) → same output every time.
-                                --> Safe for React to re-render multiple times. 
-        --> This does not happen in production.
-
- 
-
-*/
-
-
-/*
-Bad code found by strict mode:
-
-
-
-        let guestCount = 0;
-
-        function Cup() {
-        guestCount++; // 🔴 Side effect! Mutating outside variable during render
-        return <h2>Tea cup for guest #{guestCount}</h2>;
-        }
-
-        function App() {
-        return (
-            <div>
-            <Cup /> <Cup /> <Cup />
-            </div>
-        );
-        }
-*/
-
-/*
-Fixed this code:
-
-        function Cup({ guest }) {
-        return <h2>Tea cup for guest #{guest}</h2>;
-        }
-
-        function App() {
-        return (
-            <div>
-            <Cup guest={1} />
-            <Cup guest={2} />
-            <Cup guest={3} />
-            </div>
-        );
-        }   
-
-*/
-
-
-
-
-/*
- Question on Counter:
-    --> in increement function: we write this
-        const [counter, seCounter] = useState(20)
-
-        --> setCounter(counter+1)
-        --> setCounter(counter+1)
-        --> setCounter(counter+1)
-        --> setCounter(counter+1)
-
-        console.log(counter) // 21  only
-            ==> Here useState make the batches of that state and then apply those changes.
-                --> When useState look at this then it finds all are doing same thing
-                --> It will just keep one val
-                    
-                
-                
-                VS
-
-    --> in increement function: we write this
-        const [counter, seCounter] = useState(20)
-
-        --> setCounter((prevCount)=> prevCount+1) //it is saying take the previous state and then update it.
-        --> setCounter(prevCount=> prevCount+1) // it canme them anything we want just maintain consistancy
-        --> setCounter(prevCount=> prevCount+1)
-        --> setCounter(prevCount=> prevCount+1)
-
-        console.log(counter) // 24      ---> direct (+4)
-            ==> Here useState make the batches of that state and then apply those changes.
-                --> When useState look at this then it finds all are doing same thing
-                --> It will just keep one val
 
 */
