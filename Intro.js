@@ -1,119 +1,69 @@
 /*
 
-Creating Our Own React type Library:
-    --> index.html:
-        --> create a div with id "root" as we will manipulate this "div"
-        --> load  js script
+Hooks:
+    --> Create a counter with variable as let and state.
+
+Counter with variable:
+    --> JS is updating counter but DOM is not reacting to it.
+    --> react does this job but its own way
+
+React need:
+    --> Suppose I want to show this counter value in 
+        --> "counter para" :=>  <p> Counter: {counter}</p> 
+        --> increment :=>  <button onClick={incrementCounter}>Inc {counter}</button>
+        --> decrementfunc :=>  <button onClick={decrementCounter}>Dec {counter}</button>
+        --.somewhere in footer: => somewhere using `{counter}`
+    --> I will have to take the reference using queryselector and then run these methods on all of these to update the DOM.
+
+--> React controls the UI and JS control the variables. 
+    --> Hooks provide the functionality to React or JS to be in sync to rerender that particular component
+    --> Data update only through hooks to track by react
+    --> Once component rerenders then JS variable "reassigned the initial val" whereas state keep their state
+
+--> useState Hook:
+    --> built-in React Hook that lets you add state to functional components.
+    --> const [state, setState] = useState(initialValue);
+        --> state: Current state value.
+        --> setState: Function to update the state.
+        --> initialValue: Initial value (can be any type — number, string, object, array, etc
+    --> Important:
+        --> Always destructure the array returned by useState. 
+        --> Never mutate state directly (e.g., count++).  Always use the setter (setCount).
+        --> State Updates Are Asynchronous
+            --> State updates do not reflect immediately. 
+            --> React batches updates for performance.
+    --> Rules:
+        --> Only call at the top level — not inside loops, conditions, or nested functions. 
+        --> Call in the same order on every render. 
+        --> Use custom Hooks to reuse stateful logic.
+    --> Best pratice:
+        --> Use multiple useState calls for unrelated values.
+            --> const [data, setData] = useState(() => heavyCalculation());     ==> valid
+        --> Use functional initialization for expensive computations:
+            --> useState(obj/array/val) but                useState(function) is not optimized 
+        --> Avoid unnecessary state — only store what affects rendering.
     
-    --> script.js:
-        --> ultimately react see/read this code in JSON or Object structure as "reactElement"
-            --> "reactElement" tells that i want data in this form
-        --> We need a function to create DOM Element from "reactElement"
+--> Mutate State:
+    --> In this App we used
+        --> let [counter, setCounter] = useState(0)
+            --> counter++
+            --> setCounter(counter)
+    --> Issues here:
+        --> 1. You're mutating state directly:
+                --> you're still mutating a value that should be treated as immutable.
+                --> because here UI got re-rendered because of I think "onclick" function on button. 
+                --> Or else there is no way react can find that state got updated.
+        --> 2. Breaks Pure Components & Optimizations:
+                --> If your component or child components use React.memo, useMemo, or PureComponent, 
+                        they rely on reference equality. Direct mutation can cause incorrect behavior or missed updates.
+        --> 3. Fragile and Confusing and not future proof:
+                --> This pattern makes code harder to reason about. 
+                --> Future developers (or you) might assume it's safe to mutate state elsewhere, leading to bugs
+    --> write these:
+        --> const [counter, setCounter] = useState(0) //making counter as immutable
+        --> setCounter(counter + 1); // Better
+                    // or
+            setCounter(counter => counter + 1); // Best (functional update)
 
-React create reactElement type graph or JSOn and whenever needed it just create the element and render it
-
-Let's check this in vite:
-    --> check main.jsx file `npm run dev`
-    
-    --> the way we are adding and returning function in JSX. 
-    --> vite, webpack is a bundler
-
-    --> Babel:
-        --> it is not a bundler. 
-        --> It is a JavaScript compiler (transpiler) that transforms modern JavaScript (and syntax extensions like JSX) into backward-compatible JavaScript that browsers can understand.
-        --> When Babel processes JSX, it does not convert it into JSON or key-value pairs by default. Instead, it transforms JSX into React.createElement() calls (or equivalent functions, depending on the runtime).
-            --> <h1 className="title">Hello</h1>
-                                ||
-                                || Babel (JS compiler / transpiler)
-                                ||transform it into
-                                ||
-                React.createElement('h1', { className: 'title' }, 'Hello');
-
-
-Journey JSX to Page:
-    --> 1. write a function component with JSX
-            -- function MyComponent() {
-                    return <h1 className="title">Hello</h1>;
-                }
-    --> 2. JSX →→→→ React.createElement()
-            --> It is called Transpilation
-            --> Babel (or SWC or esbuild [es is faster]) transform JSX into Standard JS code.
-            --> Process:
-                    --> Parse JSX into Abstract Syntax Tree (AST)
-                    --> Transform AST node (<h1> --> react.createElement)
-                    --> Generate standard JS code
-            -- function MyComponent() {
-                    return React.createElement('h1', { className: 'title' }, 'Hello');
-                }
-            --> react.createElement is a react method but still everything else is JS code and will runwithout error so that's why it is standard JS.
-    --> 3. React.createElement() -----> React Element (Plain Object)
-            --> Called Element Creation phase and done by "React runtime" (react package)
-            -->The function call returns a React element — a lightweight description of the DOM node:
-                --> {
-                        type: 'h1',
-                        props: {
-                            className: 'welcome',
-                            children: 'Hello'
-                        }
-                    }
-
-            --> This is part of Virtual DOM, not real DOM
-            --> Faster to create, easy to diff
-        
-    --> 4. Render & reconciliation Phase (React fiber)
-            --> React (internal Fiber Architecture) is used
-                --> `ReactDOM.render()` or `createRoot().render()`
-
-            --> Process:
-                --> react call component ---> gets react elements
-                --> Compare new tree with previous (via Fiber Reconciler)
-                --> Determine minimal DOm changes needed
-            --> Steps:
-                --> Render phase (diffing): bild new Virtual DOM tree
-                --> Reconciliation: Compare old vs new V-DOm (using keys, types)
-                --> Diff Algorithm: Identify insertions, updates, deletions.
-
-    --> 5. Commit to DOM (DOM Manipulation / Mutation)
-            --> it is commit phase and done by "react-dom"
-            --> React applies changes to actual browser DOM
-                --> creates, updates, or remove real DOM Nodes
-                --> Attach eveny listners
-            --> converts to
-                    document.createElement('h1')
-                    h1.className = 'welcome'
-                    h1.textContent = 'Hello'
-                    rootElement.appendChild(h1)
-            
-    --> 6. Browser Rendering (Painting)
-        --> browser paints pixels on screen
-        --> Steps:
-            --> Style: Apply CSS
-            --> Layout: Calculate positions
-            --> Paint: Draw pixels
-            --> Composite: Layer elements
-        --> Tools used: Browser rendering engine (e.g  Blink, WebKit)
-        --> Performance tip: Minimize re-renders and layout thrashing.
-
-    --> 7. Development & build Tools Pipeline
-        --> Build/Serve Phase
-        --> Development (Dev Server):
-                --> Vite / Webpack Dev Server: Serves code, enables HMR
-                --> Hot Module Replacement (HMR): Updates UI without full reload
-        --> Production Build:
-                --> Bundler: Webpack, Vite, esbuild
-                --> Babel/SWC: Transpile + minify
-                --> Tree-shaking: Remove unused code
-                --> Code splitting: Lazy-load components
-        --> Output: Optimized static files (index.html, main.js, style.css)
-
-
-Summary Flow:
-        JSX → Babel → React.createElement() → React Element → Reconciliation → Commit → Real DOM → Browser Rendering   
-
-
-React Github:
-    --> fb/react
-        --> scripts > babel
-
-
+--> No taking reference of DOm elements and then update. Just make this state and let React handle everything
 */      
