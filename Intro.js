@@ -1,31 +1,27 @@
 /*
  #Projects:
-    --> i have a slidbar with Number and character checkbox
-    --> while I side it is generating a random text of that length.
+    --> Currency converter reat time using api.
+    --> We can use any api. Here we will be using "https://github.com/fawazahmed0/exchange-api" or can find similar api free source
+               --> https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json
 
-        --> set all the variables as an state. created password as an state to get the latest data. 
-        --> Now we need an password generator function:
-            --> But here issue is we have 3 buttons or input field -> length, character, number
-            --> either we call this function on these 3 
-            --> or if we have something which can remember the function definition between re-render
-                --> use useCallbacks
-                    --> takes 2 args -> function, deps array
- # useEffect:
-    --> Synchronize component with external function.
-    --> used in component lifcycles, at demount of comp, 
-    --> runs whenever there is any change in list of deps
-    
+ # Custom hooks:
+   --> a hook return [val, fn]
+   --> custom hooks can use built-in hooks
 
- # useRef:
-    --> We want password to be copied in clipboard whenever we click on COPY button 
-    --> both buttons and input field are in different place. So we use reference to get that value.
-    --> create `const passwordRef = useRef(null)` and then `ref={passwordRef}`  gives into button 
+ # Important notes:
+   --> `onChange={(e)=> onAmountChange && onAmountChange(e.target.value)}` Here 
+         --> we need to check that "onAmountChange" is given to this. so we just put an check
+         --> sometimes 'e.target.value' returns a string as an output which creates bugs
 
- # useCallback:
-    --> let us cache the function definition between re-renders
-    --> function definition ko cache/memory me rakh lo
-    --> It is useful to optimize as it cache the function defineition means all states and all it cache these.
+   --> When we are using loop in JSX then better to use key there so that React can identify them seperately.
+         --> we can take "id", values we are passing if they are unique
 
+   --> When we have many components in any folder like "hooks", "components", etc.
+         - better to create an 'index.js' file in that folder and import all these functions in this
+         - Now we can just import this file. 
+         - This way our code will be clean. 
 
-
+   --> useId hook:
+         - read about it.
 */
+
