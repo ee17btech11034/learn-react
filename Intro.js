@@ -1,31 +1,32 @@
 /*
- # React Router:
-      --> https://reactrouter.com/start/framework/installation 
-      --> Like we get hfunctionality with react like hooks (useState, useEffect), etc.
-            --> same way we get some functionality with 'react-router-dom'
-               --> Link: we use this inplace of 'a' tag bcz in 'a' case page is refreshed. React doess not support refresh
-               --> NavLink: this has some additional functionality that Link like
-                           -- we can give function in this
-                           -- NavLink className={({isActive})=> 'className1' {isActive ? 'colorActive : }}
-                           -- Here we can see set the color of current Navbar which is open 
+ # Context API:
+      --> When we have some data in main App. And we want to use that in 3-4th layer in-depth. 
+            -- then we will have to pass "props" to all middle components.
+            -- this is called "Prop Drilling" --> We middle comps do not need this. 
+      --> "Contaxt API":-> says that store those variable in a global space/object 
+            -- main App set this in that
+            -- and other components can access from there.
 
-      --> Steps:
-         --> Install 'react router dom':--> `npm install react-router-dom`
-         --> Created components
-         --> Now we will have to use 'react router' in  'main.jsx' 
-         --> We want that Header and Footer will be same always. only mid content will be changed. 
-               --> 2 ways to achive this
-                  --> 1. we call Header and Footer in all components. ==> Not optimized
-                  --> 2. We create a Layout and change the middle content ==> optimized (Root.jsx or Layout.jsx)
-         --> When we create Layout then we use "outlet" to tell that this will change 
-         --> this Outlet will be changed using router in main.
+      --> Other libraries which does the same work:
+            -- Redux   
+            -- redux tool kit (RTK)
+            -- Zustand
+            -- react redux
 
-   Important:
-      --> Suppose we want to fetch some data from a link. 
-      --> We will use "useEffect" as this runs whenever component state changes like mount, unmount, update, etc. 
-            -- which may take sometime. 
-      --> React and next js provide a method 'loader':
-            -- when user hover mouse over that component link (About 9assuning about has some fa=etch calls)
-            -- it will start to fetch the date and cache it.
+      --> We create a "Context" folder there we can add multiple context file for specific context. 
+            -- A context giver us a "provider" which will help us to get the val
+            -- we wrap the component with this provider. 
+            -- now all children can access it.
+
+      --> Flow:
+            1. We create a context for User "UserContext" --> this will have values
+            2. provider for this context "UserContextProvider" --> this will behave like a wrapper. through this only we will access or change the value in context
+            3. We wrapped Login and Profile in ContextProvider so that they can access the value
+            4. Login will update the data and Profile will get the data
+
+
+            Other way to use context provider is in theme.js file.
+
+
 */
 
