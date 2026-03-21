@@ -1,15 +1,19 @@
 import React from 'react';
-import { useTodo } from '../contexts';
+import {useSelector, useDispatch} from 'react-redux'
+import { removeTodo } from '../Features/todo/todoSlice';
 
-const TodoItem = ({todo}) => {
 
-    const {updateTodo, } = useTodo()
+const TodoItem = () => {
+    const todos = useSelector(state => state.todos) // yaha selector ko call krte hai wo store/state provide kr deta hai
+    // we stored the todos in todos
+    const dispatch = useDispatch()
     return (
         <div>
-            <input type="text" readOnly/>
-            <input type="checkbox" />
-            <button>Edit</button>
-            <button>Delete</button>
+            {todos.map(todo => {
+                <li key={todo.id}> {todo.text}
+                    <button onClick={()=>dispatch(removeTodo(todo.id))}>Edit</button>
+                </li>
+            })}
         </div>
     );
 }
